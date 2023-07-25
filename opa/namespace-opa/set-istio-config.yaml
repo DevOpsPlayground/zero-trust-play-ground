@@ -1,0 +1,4 @@
+    - name: "opa.<PROJECT_REP_ID>"
+      envoyExtAuthzGrpc:
+        service: "opa.<PROJECT_ID>.svc.cluster.local"
+        port: "9191"

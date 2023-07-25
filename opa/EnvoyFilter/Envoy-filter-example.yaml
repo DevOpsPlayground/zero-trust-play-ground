@@ -1,0 +1,147 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: ext-authz
+  namespace: istio-system
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_INBOUND
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.filters.network.http_connection_manager"
+              subFilter:
+                name: "envoy.filters.http.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.ext_authz
+          typed_config:
+            '@type': type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
+            transport_api_version: V3
+            status_on_error:
+              code: ServiceUnavailable
+            with_request_body:
+              max_request_bytes: 8192
+              allow_partial_message: true
+            grpc_service:
+              # NOTE(tsandall): when this was tested with the envoy_grpc client the gRPC
+              # server was receiving check requests over HTTP 1.1. The gRPC server in
+              # OPA-Istio would immediately close the connection and log that a bogus
+              # preamble was sent by the client (it expected HTTP 2). Switching to the
+              # google_grpc client resolved this issue.
+              google_grpc:
+                target_uri: 127.0.0.1:9191
+                stat_prefix: "ext_authz"
+
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opa-istio-config
+data:
+  config.yaml: |
+    plugins:
+      envoy_ext_authz_grpc:
+        addr: :9191
+        path: istio/authz/allow
+    decision_logs:
+      console: true
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opa-policy
+data:
+  policy.rego: |
+    package istio.authz
+
+    import input.attributes.request.http as http_request
+    import input.parsed_path
+
+    default allow = false
+
+    allow {
+        parsed_path[0] == "health"
+        http_request.method == "GET"
+    }
+
+    allow {
+        roles_for_user[r]
+        required_roles[r]
+    }
+
+    roles_for_user[r] {
+        r := user_roles[user_name][_]
+    }
+
+    required_roles[r] {
+        perm := role_perms[r][_]
+        perm.method = http_request.method
+        perm.path = http_request.path
+    }
+
+    user_name = parsed {
+        [_, encoded] := split(http_request.headers.authorization, " ")
+        [parsed, _] := split(base64url.decode(encoded), ":")
+    }
+
+    user_roles = {
+        "alice": ["guest"],
+        "bob": ["admin"]
+    }
+
+    role_perms = {
+        "guest": [
+            {"method": "GET",  "path": "/productpage"},
+        ],
+        "admin": [
+            {"method": "GET",  "path": "/productpage"},
+            {"method": "GET",  "path": "/api/v1/products"},
+        ],
+    }
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: opa
+  labels:
+    app: opa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opa
+  template:
+    metadata:
+      labels:
+        app: opa
+    spec:
+      containers:
+        - image: openpolicyagent/opa:latest
+          securityContext:
+            runAsUser: 1111
+          name: opa
+          ports:
+          - containerPort: 9191
+          args:
+          - "run"
+          - "--server"
+          - "--addr=localhost:8181"
+          - "/policies/policy.rego"
+          volumeMounts:
+            - readOnly: true
+              mountPath: /policies
+              name: opa-policy
+      volumes:
+        - name: opa-policy
+          configMap:
+            name: opa-policy

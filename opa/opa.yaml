@@ -1,0 +1,51 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: opa
+  labels:
+    app: opa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opa
+  template:
+    metadata:
+      labels:
+        app: opa
+    spec:
+      containers:
+        - image: openpolicyagent/opa:latest
+          securityContext:
+            runAsUser: 1111
+          name: opa
+          ports:
+          - containerPort: 9191
+          args:
+          - "run"
+          - "--server"
+          - "--addr=localhost:8181"
+          - "/policies/policy.rego"
+          volumeMounts:
+            - readOnly: true
+              mountPath: /policies
+              name: opa-policy
+      volumes:
+        - name: opa-policy
+          configMap:
+            name: opa-policy
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opa
+  labels:
+    app: opa
+spec:
+  ports:
+  - name: grpc
+    port: 9191
+    targetPort: 9191
+  selector:
+    app: opa
