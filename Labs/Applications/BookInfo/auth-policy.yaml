@@ -1,0 +1,16 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: "test-auth"
+spec:
+  selector:
+    matchLabels:
+      app: <AUTH_APP_LABEL>
+  action: CUSTOM
+  provider:
+    name: "opa.<PROJECT_REP_ID>"
+  rules:
+  - to:
+    - operation:
+        # notPaths: ["/ip"]
+        notPaths: ["/healthz"] 

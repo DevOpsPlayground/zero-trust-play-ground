@@ -3,6 +3,10 @@ https://raw.githubusercontent.com/istio/istio/release-1.18/samples/bookinfo/plat
 https://raw.githubusercontent.com/istio/istio/release-1.18/samples/bookinfo/networking/bookinfo-gateway.yaml
 https://istio.io/latest/docs/setup/getting-started/
 
+Getting Started with Rego
+
+https://www.openpolicyagent.org/docs/latest/policy-reference/
+
 
 
 opa run --server \
