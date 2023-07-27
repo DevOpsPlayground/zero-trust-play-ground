@@ -8,8 +8,14 @@ This playground uses the following technology so you will need to check they are
 -   Some knowledge of basic service mesh and ingress traffic
 -   Some knowledge of programming fundamenals
 
+## Architecture
+<p align="center">
+<img width="544" alt="Screenshot 2023-05-23 at 11 33 12" src="./zz_assets/zero-trust-lab.png">
+</p>
+
+
 # Introduction
-WHAT IS Rego
+### WHAT IS Rego
 OPA's purpose-built, declarative language Rego. Rego includes rich support for traversing nested documents and transforming data using syntax inspired by dictionary and array access in languages like Python and JSONPath.
 In this playground we are going to build a web application in python and Flask via the TDD process.
 We will write tests to describe the functionality of the components.
@@ -48,6 +54,12 @@ In your labs folder navigate to Lab01 and open the getting started file -   gett
 
 This is a walkthrough of the basics of rego language: here we will review the types and rules of writing rego
 
-### Step 3
+### Step 4
+#### Rego Language Basics
+In your labs folder navigate to Lab01 and open the getting started file -   language-basic.md  
+/Labs/Lab01/language-basic.md 
+
+### Step 5
 OPEN the link to the rego playground
 https://play.openpolicyagent.org/p/uhfkfkTwmy
+
