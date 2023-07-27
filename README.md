@@ -112,3 +112,75 @@ Installing the book info Ingress
 ```
   kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/bookinfo/networking/bookinfo-gateway.yaml
 ```
+verify that your pods are running ok
+
+```
+kubectl get pods
+```
+### Step 11
+
+Run the following coming to verify that your caan access the product package
+```
+kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/productpage | grep -o "<title>.*</title>"
+```
+You should see the following output
+```
+<title>Simple Bookstore App</title>
+```
+
+## User Alice: Access Control - Guest
+### Step 12
+
+Test to confirm that user alice has product page access
+```
+kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/productpage --user alice:password
+```
+
+### Step 13
+Test to confirm that user alice has API endpoint access
+```
+kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/api/v1/products --user alice:password
+```
+
+## User Bob: Access Control - Admin
+### Step 14
+Repeat same steps for user bob who is an admin
+```
+kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/productpage --user bob:password
+```
+### Step 15
+```
+ kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/api/v1/products --user bob:password
+```
+
+# OPA Integration
+## Edit AuthorizationPolicy
+### Step 16
+
+Get the current authorizationpolicy
+```
+kubectl get authorizationpolicy
+```
+Edit the authorizationpolicy and change the label to app: productpage
+```
+kubectl edit authorizationpolicy
+```
+- press escape on your key board
+
+- and type wq! to save changes
+
+```
+kubectl get authorizationpolicy
+```
+
+### Step 17
+
+## Repeat Steps 12 -15
+
+
+### Step 18
+
+Checking the logs
+```
+kubectl logs opa-6fd9dbb96-89gm8|grep decision
+```
