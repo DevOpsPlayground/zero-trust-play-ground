@@ -49,15 +49,13 @@ You should be presented with VS Code which should look something like this:
 
 ### Step 3
 Getting Started:
-In your labs folder navigate to Lab01 and open the getting started file -   getting-started.md  
-/Labs/Lab01/getting-started.md
+In your labs folder navigate to Lab01 and open the getting started file - [getting-started.md](./Labs/Lab01/getting-started.md)
 
 This is a walkthrough of the basics of rego language: here we will review the types and rules of writing rego
 
 ### Step 4
 #### Rego Language Basics
-In your labs folder navigate to Lab01 and open the getting started file -   language-basic.md  
-/Labs/Lab01/language-basic.md 
+In your labs folder navigate to Lab01 and open the getting started file - [language-basic.md](./Labs/Lab01/language-basic.md)  
 
 ### Step 5
 OPEN the link to the rego playground
@@ -66,7 +64,7 @@ https://play.openpolicyagent.org/p/pcXnGFFBb0
 ### Step 6
 Rules
 Copy and paste the following section into your playground
-```
+```ocaml
 allow_world if {
 	"world" != "world"
 }
@@ -78,7 +76,7 @@ allow_new_world if {
 ### Step 7
 Copy and paste the following section into your playground
 Condition
-```
+```ocaml
 greeting := true {
  data.greetings == "hello world"
  input.message == "worlds"
@@ -97,7 +95,7 @@ https://play.openpolicyagent.org/p/cFmhezkVGI
 
 Run the following command on your workstation to inspect our configmap
 
-```
+```bash
 kubectl get configmap opa-policy -o yaml
 ```
 ### Step 10
@@ -105,10 +103,10 @@ kubectl get configmap opa-policy -o yaml
 Lets deploy our application: Book-Info Application
 
 Installing the book info Application
-```
-  kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/bookinfo/platform/kube/bookinfo.yaml
+```bash
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/bookinfo/platform/kube/bookinfo.yaml
 ```  
 Installing the book info Ingress
-```
-  kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/bookinfo/networking/bookinfo-gateway.yaml
+```bash
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/bookinfo/networking/bookinfo-gateway.yaml
 ```
