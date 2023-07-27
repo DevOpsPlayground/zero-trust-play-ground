@@ -9,8 +9,8 @@ This playground uses the following technology so you will need to check they are
 -   Some knowledge of programming fundamenals
 
 ## Architecture
-<p align="center">
-<img width="544" alt="Screenshot 2023-05-23 at 11 33 12" src="./zz_assets/zero-trust-labs.png">
+<p align="left">
+<img width="1024" alt="Screenshot 2023-05-23 at 11 33 12" src="./zz_assets/zero-trust-labs.png">
 </p>
 
 
