@@ -129,7 +129,7 @@ allow = true {
 ```
 ## Function:
 A function is also a type of rule, and it has the following form.
-```ocaml
+```
 <rule name> ( <argument>, ... ) = <variable to return> {
     <rule literal 1>
     <rule literal 2>
