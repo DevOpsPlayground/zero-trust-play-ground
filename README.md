@@ -49,15 +49,13 @@ You should be presented with VS Code which should look something like this:
 
 ### Step 3
 Getting Started:
-In your labs folder navigate to Lab01 and open the getting started file -   getting-started.md  
-/Labs/Lab01/getting-started.md
+In your labs folder navigate to Lab01 and open the getting started file - [getting-started.md](./Labs/Lab01/getting-started.md)
 
 This is a walkthrough of the basics of rego language: here we will review the types and rules of writing rego
 
 ### Step 4
 #### Rego Language Basics
-In your labs folder navigate to Lab01 and open the getting started file -   language-basic.md  
-/Labs/Lab01/language-basic.md 
+In your labs folder navigate to Lab01 and open the getting started file - [language-basic.md](./Labs/Lab01/language-basic.md)
 
 ### Step 5
 OPEN the link to the rego playground
@@ -66,7 +64,7 @@ https://play.openpolicyagent.org/p/pcXnGFFBb0
 ### Step 6
 Rules
 Copy and paste the following section into your playground
-```
+```ocaml
 allow_world if {
 	"world" != "world"
 }
@@ -78,7 +76,7 @@ allow_new_world if {
 ### Step 7
 Copy and paste the following section into your playground
 Condition
-```
+```ocaml
 greeting := true {
  data.greetings == "hello world"
  input.message == "worlds"
@@ -105,22 +103,22 @@ kubectl get configmap opa-policy -o yaml
 Lets deploy our application: Book-Info Application
 
 Installing the book info Application
+```bash
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/bookinfo/platform/kube/bookinfo.yaml
 ```
-  kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/bookinfo/platform/kube/bookinfo.yaml
-```  
 Installing the book info Ingress
-```
-  kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/bookinfo/networking/bookinfo-gateway.yaml
+```bash
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/bookinfo/networking/bookinfo-gateway.yaml
 ```
 verify that your pods are running ok
 
-```
+```bash
 kubectl get pods
 ```
 ### Step 11
 
 Run the following coming to verify that your caan access the product package
-```
+```bash
 kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/productpage | grep -o "<title>.*</title>"
 ```
 You should see the following output
@@ -132,24 +130,24 @@ You should see the following output
 ### Step 12
 
 Test to confirm that user alice has product page access
-```
+```bash
 kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/productpage --user alice:password
 ```
 
 ### Step 13
 Test to confirm that user alice has API endpoint access
-```
+```bash
 kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/api/v1/products --user alice:password
 ```
 
 ## User Bob: Access Control - Admin
 ### Step 14
 Repeat same steps for user bob who is an admin
-```
+```bash
 kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/productpage --user bob:password
 ```
 ### Step 15
-```
+```bash
  kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/api/v1/products --user bob:password
 ```
 
@@ -158,18 +156,18 @@ kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.
 ### Step 16
 
 Get the current authorizationpolicy
-```
+```bash
 kubectl get authorizationpolicy
 ```
 Edit the authorizationpolicy and change the label to app: productpage
-```
+```bash
 kubectl edit authorizationpolicy
 ```
 - press escape on your key board
 
 - and type wq! to save changes
 
-```
+```bash
 kubectl get authorizationpolicy
 ```
 
@@ -181,6 +179,6 @@ kubectl get authorizationpolicy
 ### Step 18
 
 Checking the logs
-```
+```bash
 kubectl logs opa-6fd9dbb96-89gm8|grep decision
 ```
