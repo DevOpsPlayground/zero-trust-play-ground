@@ -6,10 +6,11 @@ The top unit of Rego is the module. One Rego file can be viewed as one module
 The modules in OPA are similar to modules in general-purpose languages such as Go, but can be seen as policies instead of code, and the policies themselves can be viewed as code, so it is almost identical to modules in general-purpose languages
 A package declaration is similar to a package declaration in a typical programming language, for example:
 
-### package hello
+### package hello
 It can also be used to represent a hierarchy using .
-
+```
 package hello.test.p1
+```
 Declared packages are used to isolate different modules when loading the contents of that module, and different package names can have different namespaces, so variables with the same name and functions can exist in different packages.
 
 ## Import:
