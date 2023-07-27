@@ -61,5 +61,54 @@ In your labs folder navigate to Lab01 and open the getting started file -   lang
 
 ### Step 5
 OPEN the link to the rego playground
-https://play.openpolicyagent.org/p/uhfkfkTwmy
+https://play.openpolicyagent.org/p/pcXnGFFBb0
 
+### Step 6
+Rules
+Copy and paste the following section into your playground
+```
+allow_world if {
+	"world" != "world"
+}
+
+allow_new_world if {
+	"world" == "world"
+}
+```
+### Step 7
+Copy and paste the following section into your playground
+Condition
+```
+greeting := true {
+ data.greetings == "hello world"
+ input.message == "worlds"
+}
+```
+### Step 8
+OPEN the link to the rego playground on a new tab on your browser
+https://play.openpolicyagent.org/p/AyJQ4vOrHX
+
+### Step 9
+Demo Labs
+
+In this lab will will be reviewing the policy we have already defined in our configmap
+
+https://play.openpolicyagent.org/p/cFmhezkVGI
+
+Run the following command on your workstation to inspect our configmap
+
+```
+kubectl get configmap opa-policy -o yaml
+```
+### Step 10
+
+Lets deploy our application: Book-Info Application
+
+Installing the book info Application
+```
+  kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/bookinfo/platform/kube/bookinfo.yaml
+```  
+Installing the book info Ingress
+```
+  kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/bookinfo/networking/bookinfo-gateway.yaml
+```

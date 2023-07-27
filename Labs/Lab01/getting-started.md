@@ -1,6 +1,6 @@
 
 
-# How does opa workload
+# How does opa workload
 
 
 
@@ -43,8 +43,8 @@ Documents: - RESTful HTTP APIs
 ### RULES
 
 
-### Defining RULES
+### Defining RULES
 OPEN the link to the rego playground
-https://play.openpolicyagent.org/p/uhfkfkTwmy
+https://play.openpolicyagent.org/p/pcXnGFFBb0
 
 
